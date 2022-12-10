@@ -2,7 +2,7 @@ class Observable {
   private value;
   private subscribers = {};
 
-  constructor(value) {
+  constructor(value = null) {
     this.value = value;
   }
   
