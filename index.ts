@@ -9,14 +9,17 @@ type SubscriberOption<T> = {
 class Observable<T> {
     private value:T;
 
+    private isBehaviorObservable:boolean;
+
     private subscribers:{[key:string]: (val:T) => any} = {};
 
     private beforeSubscribers:{[key:string]: (val:T) => any} = {};
 
     private afterSubscribers:{[key:string]: (val:T) => any} = {};
 
-    constructor(value:T = null) {
+    constructor(value:T = null, isBehaviorObservable = false) {
         this.value = value;
+        this.isBehaviorObservable = isBehaviorObservable;
     }
 
     private broadcast() {
@@ -40,13 +43,12 @@ class Observable<T> {
     }
 
     subscribe({
-        func, isImmediate, key, before, after,
+        func, isImmediate = this.isBehaviorObservable, key = 'main', before, after,
     }:SubscriberOption<T>) {
-        const subKey = key || 'main';
-        this.subscribers[subKey] = func;
+        this.subscribers[key] = func;
 
-        this.beforeSubscribers[`${subKey}__before__`] = before || null;
-        this.afterSubscribers[`${subKey}__after__`] = after || null;
+        this.beforeSubscribers[`${key}__before__`] = before || null;
+        this.afterSubscribers[`${key}__after__`] = after || null;
 
         if (isImmediate && before) {
             before(this.value);
