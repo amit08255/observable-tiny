@@ -8,13 +8,21 @@ It allows you to create a simple observable and add some subscribers to it. When
 Default initial value of the observable is `null`. You can create the obsersable easily with some initial value in it:
 
 ```ts
-const observable = new Observable<type>(initialValue);
+const observable = new Observable<type>(initialValue, isBehaviorObservable);
 ```
+
+Second parameter `isBehaviorObservable` is a boolean value whose default value is `false`. Behavior observable means that whenever a subscriber is registered it is executed immediately with current observable value.
 
 **Example:**
 
 ```ts
 const observable = new Observable<number>(0); // creating with initial value zero
+```
+
+**Example 2:**
+
+```ts
+const observable = new Observable<number>(0, true); // creating behavior observable with initial value zero
 ```
 
 ## Adding Subscribers
@@ -34,7 +42,7 @@ observable.subscribe({
 * **func:** Subscriber callback function to execute on every update. The parameter passed to the function is value in observable.
 * **before:** Callback function to execute before the subscriber callback function. **Optional**.
 * **after:** Callback function to execute after the subscriber callback function. **Optional**.
-* **isImmediate:** If the value is `true` the callback function is executed immediately with current value in observer. **Optional**.
+* **isImmediate:** If the value is `true` the callback function is executed immediately with current value in observer. `isBehaviorObservable` is the default value of this option. Setting this value will override the behavior of `isBehaviorObservable` option set during initialization. **Optional**.
 * **key:** Key is used to make sure no duplicate subscriber is registered. Default key is `main` and every subscriber is registered with a key. **Optional**.
 
 **Example:**
