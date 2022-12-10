@@ -76,3 +76,5 @@ class Observable<T> {
         });
     }
 }
+
+export default Observable;
