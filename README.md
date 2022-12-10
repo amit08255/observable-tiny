@@ -3,7 +3,7 @@
 Tiny observable for reactive programming in JavaScript and TypeScript without any dependencies.
 It allows you to create a simple observable and add some subscribers to it. Whenever any updates happen on the observable it gets broadcasted to all subscribers.
 
-## Create Observable
+## Creating Observable
 
 Default initial value of the observable is `null`. You can create the obsersable easily with some initial value in it:
 
