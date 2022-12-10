@@ -32,10 +32,10 @@ observable.subscribe({
 ```
 
 * **func:** Subscriber callback function to execute on every update. The parameter passed to the function is value in observable.
-* **before:** Callback function to execute before the subscriber callback function. Optional.
-* **after:** Callback function to execute after the subscriber callback function. Optional.
-* **isImmediate:** If the value is `true` the callback function is executed immediately with current value in observer.
-* **key:** Key is used to make sure no duplicate subscriber is registered. Default key is `main` and every subscriber is registered with a key.
+* **before:** Callback function to execute before the subscriber callback function. **Optional**.
+* **after:** Callback function to execute after the subscriber callback function. **Optional**.
+* **isImmediate:** If the value is `true` the callback function is executed immediately with current value in observer. **Optional**.
+* **key:** Key is used to make sure no duplicate subscriber is registered. Default key is `main` and every subscriber is registered with a key. **Optional**.
 
 **Example:**
 
