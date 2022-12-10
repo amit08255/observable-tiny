@@ -22,7 +22,13 @@ const observable = new Observable<number>(0); // creating with initial value zer
 You can add any number of subscribers for an observable. These are the callback functions which gets executed on every value update.
 
 ```ts
-observable.subscribe(callbackFunction, isImmediate, key);
+observable.subscribe({
+  func: callbackFunction,
+  isImmediate: boolean,
+  key: string,
+  before: beforeCallbackFunction,
+  after: afterCallbackFunction,
+});
 ```
 
 * **callbackFunction:** Subscriber callback function to execute on every update. The parameter passed to the function is value in observable.
@@ -32,9 +38,14 @@ observable.subscribe(callbackFunction, isImmediate, key);
 **Example:**
 
 ```ts
-observable.subscribe((val) => {
-  console.log("val: ", val);
-}, false, 'index');
+observable.subscribe({
+  before: (val) => console.log("before xxx: ", val),
+  func: (val) => {
+    console.log("val xxx: ", val);
+  },
+  after: (val) => console.log("after xxx: ", val),
+  key: 'index',
+});
 ```
 
 ## Updating Value
