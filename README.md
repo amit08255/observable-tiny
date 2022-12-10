@@ -41,11 +41,11 @@ observable.subscribe({
 
 ```ts
 observable.subscribe({
-  before: (val) => console.log("before xxx: ", val),
+  before: (val) => console.log("before: ", val),
   func: (val) => {
-    console.log("val xxx: ", val);
+    console.log("val: ", val);
   },
-  after: (val) => console.log("after xxx: ", val),
+  after: (val) => console.log("after: ", val),
   key: 'index',
 });
 ```
