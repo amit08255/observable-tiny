@@ -8,13 +8,13 @@ It allows you to create a simple observable and add some subscribers to it. When
 Default initial value of the observable is `null`. You can create the obsersable easily with some initial value in it:
 
 ```ts
-const observable = new Observable(initialValue);
+const observable = new Observable<type>(initialValue);
 ```
 
 **Example:**
 
 ```ts
-const observable = new Observable(0); // creating with initial value zero
+const observable = new Observable<number>(0); // creating with initial value zero
 ```
 
 ## Adding Subscribers
