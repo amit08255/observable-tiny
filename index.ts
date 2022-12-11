@@ -6,6 +6,12 @@ type SubscriberOption<T> = {
     after?:(val:T) => any,
 };
 
+type PipedObservable<T> = {
+    subscribe: (options:SubscriberOption<T>) => void,
+    unsubscribe: (key?:string) => void,
+    dispose: () => void,
+};
+
 class Observable<T> {
     private value:T;
 
@@ -22,6 +28,7 @@ class Observable<T> {
         this.isBehaviorObservable = isBehaviorObservable;
     }
 
+    // Broadcast value update to all subscribers
     private broadcast() {
         Object.keys(this.subscribers).forEach(async (key) => {
             if (this.beforeSubscribers[`${key}__before__`]) {
@@ -36,12 +43,13 @@ class Observable<T> {
         });
     }
 
+    // Trigger value update with new value
     next(value:T) {
         this.value = value;
         this.broadcast();
-        return this;
     }
 
+    // register a subscriber
     subscribe({
         func, isImmediate = this.isBehaviorObservable, key = 'main', before, after,
     }:SubscriberOption<T>) {
@@ -61,20 +69,28 @@ class Observable<T> {
         if (isImmediate && after) {
             after(this.value);
         }
-
-        return this;
     }
 
+    // unsubscribe subscriber by key
     unsubscribe(key = 'main') {
         delete this.subscribers[key];
         delete this.beforeSubscribers[`${key}__before__`];
         delete this.afterSubscribers[`${key}__after__`];
-        return this;
     }
 
+    // unsbscribe all subscribers
     dispose() {
         Object.keys(this.subscribers).forEach((key) => {
             this.unsubscribe(key);
+        });
+    }
+
+    // send protected version of observable which only allows limited functionality
+    pipe():PipedObservable<T> {
+        return ({
+            subscribe: this.subscribe.bind(this),
+            unsubscribe: this.unsubscribe.bind(this),
+            dispose: this.dispose.bind(this),
         });
     }
 }
