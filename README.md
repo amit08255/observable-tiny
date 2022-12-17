@@ -8,7 +8,7 @@ It allows you to create a simple observable and add some subscribers to it. When
 Default initial value of the observable is `null`. You can create the obsersable easily with some initial value in it:
 
 ```ts
-const observable = new Observable<type>(initialValue, isBehaviorObservable);
+const observable = new Observables<type>(initialValue, isBehaviorObservable);
 ```
 
 Second parameter `isBehaviorObservable` is a boolean value whose default value is `false`. Behavior observable means that whenever a subscriber is registered it is executed immediately with current observable value.
@@ -16,13 +16,13 @@ Second parameter `isBehaviorObservable` is a boolean value whose default value i
 **Example:**
 
 ```ts
-const observable = new Observable<number>(0); // creating with initial value zero
+const observable = new Observables<number>(0); // creating with initial value zero
 ```
 
 **Example 2:**
 
 ```ts
-const observable = new Observable<number>(0, true); // creating behavior observable with initial value zero
+const observable = new Observables<number>(0, true); // creating behavior observable with initial value zero
 ```
 
 ## Adding Subscribers
@@ -70,4 +70,42 @@ observable.next(value);
 
 ```ts
 observable.next(2);
+```
+
+## Unsubscribing Subscribers By Key
+
+Removing subscribers from observable is very easy using `unsubscribe` method. It has an optional parameter key whose default value is `main`.
+
+```ts
+observable.unsubscribe(key);
+```
+
+**Example:**
+
+```ts
+observable.unsubscribe('index');
+```
+
+## Unsubscribing All Subscribers
+
+The `dispose` method allows you to remove all subscribers from observables.
+
+```ts
+observable.dispose();
+```
+
+## Resetting Observable
+
+The `reset` method allows you to reset value of observable to the passed initial value.
+
+```ts
+observable.reset();
+```
+
+## Getting Protected Observable
+
+The `pipe` method allows you to get protected version of observable which does not allows changing values except reset functionality. It provides only these methods: `subscribe`, `unsubscribe` and `reset`.
+
+```ts
+observable.pipe();
 ```
