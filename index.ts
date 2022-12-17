@@ -6,13 +6,16 @@ type SubscriberOption<T> = {
     after?:(val:T) => any,
 };
 
-type PipedObservable<T> = {
+type PipedObservables<T> = {
     subscribe: (options:SubscriberOption<T>) => void,
     unsubscribe: (key?:string) => void,
+    reset: () => void,
     dispose: () => void,
 };
 
-class Observable<T> {
+class Observables<T> {
+    private initialValue:T;
+
     private value:T;
 
     private isBehaviorObservable:boolean;
@@ -24,6 +27,7 @@ class Observable<T> {
     private afterSubscribers:{[key:string]: (val:T) => any} = {};
 
     constructor(value:T = null, isBehaviorObservable = false) {
+        this.initialValue = value;
         this.value = value;
         this.isBehaviorObservable = isBehaviorObservable;
     }
@@ -78,7 +82,12 @@ class Observable<T> {
         delete this.afterSubscribers[`${key}__after__`];
     }
 
-    // unsbscribe all subscribers
+    // reset observable to initial value
+    reset() {
+        this.next(this.initialValue);
+    }
+
+    // unsubscribe all subscribers
     dispose() {
         Object.keys(this.subscribers).forEach((key) => {
             this.unsubscribe(key);
@@ -86,13 +95,14 @@ class Observable<T> {
     }
 
     // send protected version of observable which only allows limited functionality
-    pipe():PipedObservable<T> {
+    pipe():PipedObservables<T> {
         return ({
             subscribe: this.subscribe.bind(this),
             unsubscribe: this.unsubscribe.bind(this),
+            reset: this.reset.bind(this),
             dispose: this.dispose.bind(this),
         });
     }
 }
 
-export default Observable;
+export default Observables;
