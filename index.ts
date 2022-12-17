@@ -10,7 +10,6 @@ type PipedObservables<T> = {
     subscribe: (options:SubscriberOption<T>) => void,
     unsubscribe: (key?:string) => void,
     reset: () => void,
-    dispose: () => void,
 };
 
 class Observables<T> {
@@ -100,7 +99,6 @@ class Observables<T> {
             subscribe: this.subscribe.bind(this),
             unsubscribe: this.unsubscribe.bind(this),
             reset: this.reset.bind(this),
-            dispose: this.dispose.bind(this),
         });
     }
 }
