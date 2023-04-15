@@ -1,31 +1,31 @@
-type SubscriberOption<T> = {
-    func:(val:T) => any,
-    isImmediate?:boolean,
-    key?:string,
-    before?:(val:T) => any,
-    after?:(val:T) => any,
+export type SubscriberOption<T> = {
+  func: (val: T) => any;
+  isImmediate?: boolean;
+  key?: string;
+  before?: (val: T) => any;
+  after?: (val: T) => any;
 };
 
 type PipedObservables<T> = {
-    subscribe: (options:SubscriberOption<T>) => void,
-    unsubscribe: (key?:string) => void,
-    reset: () => void,
+  subscribe: (options: SubscriberOption<T>) => void;
+  unsubscribe: (key?: string) => void;
+  reset: () => void;
 };
 
 class Observables<T> {
-    private initialValue:T;
+    private initialValue: T;
 
-    private value:T;
+    private value: T;
 
-    private isBehaviorObservable:boolean;
+    private isBehaviorObservable: boolean;
 
-    private subscribers:{[key:string]: (val:T) => any} = {};
+    private subscribers: { [key: string]: (val: T) => any } = {};
 
-    private beforeSubscribers:{[key:string]: (val:T) => any} = {};
+    private beforeSubscribers: { [key: string]: (val: T) => any } = {};
 
-    private afterSubscribers:{[key:string]: (val:T) => any} = {};
+    private afterSubscribers: { [key: string]: (val: T) => any } = {};
 
-    constructor(value:T = null, isBehaviorObservable = false) {
+    constructor(value: T = null, isBehaviorObservable = false) {
         this.initialValue = value;
         this.value = value;
         this.isBehaviorObservable = isBehaviorObservable;
@@ -47,15 +47,19 @@ class Observables<T> {
     }
 
     // Trigger value update with new value
-    next(value:T) {
+    next(value: T) {
         this.value = value;
         this.broadcast();
     }
 
     // register a subscriber
     subscribe({
-        func, isImmediate = this.isBehaviorObservable, key = 'main', before, after,
-    }:SubscriberOption<T>) {
+        func,
+        isImmediate = this.isBehaviorObservable,
+        key = 'main',
+        before,
+        after,
+    }: SubscriberOption<T>) {
         this.subscribers[key] = func;
 
         this.beforeSubscribers[`${key}__before__`] = before || null;
@@ -65,7 +69,7 @@ class Observables<T> {
             before(this.value);
         }
 
-        if (isImmediate) {
+        if (isImmediate && func) {
             func(this.value);
         }
 
@@ -94,12 +98,12 @@ class Observables<T> {
     }
 
     // send protected version of observable which only allows limited functionality
-    pipe():PipedObservables<T> {
-        return ({
+    pipe(): PipedObservables<T> {
+        return {
             subscribe: this.subscribe.bind(this),
             unsubscribe: this.unsubscribe.bind(this),
             reset: this.reset.bind(this),
-        });
+        };
     }
 }
 
